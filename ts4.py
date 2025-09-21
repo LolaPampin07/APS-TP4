@@ -37,7 +37,7 @@ def mi_funcion_sen(frecuencia, nn, amplitud = 1, offset = 0, fase = 0, fs = 2):
 
     return t, x
 
-t1,s1 = mi_funcion_sen(frecuencia = omega_1, nn = N, fs = fs, amplitud = a0) # Funcion senoidal con frecuencia aleatoria
+t1,s1 = mi_funcion_sen(frecuencia = omega_1*df, nn = N, fs = fs, amplitud = a0) # Funcion senoidal con frecuencia aleatoria
 
 # %% Calculo las potencias para ver que machean
 
@@ -76,39 +76,23 @@ RUIDO10 = (1/N)*fft(ruido10)
 # Calculo la FFT
 X1_snr10 = (1/N)*fft(x1_snr10) # Multiplico por 1/N para calibrarlo --> llevar el piso de ruido a cero
 
-# %% GRAFICO
+# %% GRAFICO senal + ruido
 plt.figure()  # Tamaño de la figura (ancho, alto)
-
-# Grafico X1 con SNR = 3db
-
-plt.subplot(1,2,1)
-plt.title("Densidades espectrales de potencia (PDS) con SNR = 3db")
-plt.xlabel('Frecuencia (Hz)')
-plt.ylabel('PDS [db]')
-plt.xlim([-fs/2, fs/2]) # En este caso fs = N, pero pongo fs para saber que va eso y no va siempre N
-# plt.plot(ff, np.log10(np.abs(S1)**2) * 10, label = 'S1') # En este caso es un db de tension
-# plt.plot(ff, np.log10(np.abs(R)**2) * 10, label = 'Ruido')
-plt.plot(ff, np.log10(2*np.abs(X1_snr3)**2) * 10, label = 'X1 con SNR = 3dB')  # Densidad espectral de potencia
-plt.legend()
-
-plt.subplot(1,2,2)
-plt.title("Densidades espectrales de potencia (PDS) con SNR = 10db")
+plt.title("Densidades espectrales de potencia (PDS) con w= " + str(omega_1*df))
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.xlim([0, fs/2]) # En este caso fs = N, pero pongo fs para saber que va eso y no va siempre N
-# plt.plot(ff, np.log10(np.abs(S1)**2) * 10, label = 'S1') # En este caso es un db de tension
-# plt.plot(ff, np.log10(np.abs(R)**2) * 10, label = 'Ruido')
-plt.plot(ff, np.log10(2*np.abs(X1_snr10)**2) * 10, label = 'X1 con SNR = 10dB')  # Densidad espectral de potencia
+
+plt.plot(ff, np.log10(2*np.abs(X1_snr10)**2) * 10,color='b', label = 'X1 con SNR = 10dB')  # Densidad espectral de potencia
+plt.plot(ff, np.log10(2*np.abs(X1_snr3)**2) * 10, color='y',label = 'X1 con SNR = 3dB')  # Densidad espectral de potencia
 plt.legend()
-
 plt.show()
-
 # En ruido es poco entonces se "tapa", no me juega en la suma
 # Estar 250dB por debajo, es estar 25 ordenes de potencia por debajo
 # Todo el piso de ruido es tapado por la energia, al ser esta tan tan grande (casi infinitamente mas grande), lo tapa al ruido.
 
-# %% Vamos a hacer una funcion seno para poder pasarle matrices
-k0 = N / 4
+# %% Realizo las 200 realizaciones
+k0 = omega_1 / 4
 t = np.arange(N).reshape(-1,1) / fs # reshape para que las columnas sean tiempo
 t_mat = np.tile(t, (1, realizaciones)) # (1000, 200)
 
@@ -137,15 +121,15 @@ x_mat10 = s_mat + ruido_mat10
 X_mat3 = (1/N) * fft(x_mat3, axis=0)
 X_mat10 = (1/N) * fft(x_mat10, axis=0)
 
-plt.figure()
-
-plt.xlabel('Frecuencia (Hz)')
-plt.ylabel('PDS [db]')
-plt.plot(ff, np.log10(2*np.abs(X_mat3)**2) * 10, label = 'SNR = 3dB')  # Densidad espectral de potencia
-plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10, label = 'SNR = 10dB')
-plt.xlim([0, fs/2])
-
-plt.show()
+# plt.figure()
+# plt.title('FFT señal + ruido')
+# plt.xlabel('Frecuencia (Hz)')
+# plt.ylabel('PDS [db]')
+# plt.plot(ff, np.log10(2*np.abs(X_mat3)**2) * 10, label = 'SNR = 3dB')  # Densidad espectral de potencia
+# plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10, label = 'SNR = 10dB')
+# plt.xlim([0, fs/2])
+# plt.legend()
+# plt.show()
 
 
 # %% Señales ventaneadas
@@ -164,30 +148,30 @@ X_mat_H3 = (1/N) * fft(x_vent_H3, axis=0)
 
 # Graficos de la transformada de senales ventanadas con ruido
 plt.figure()
-
+plt.title("Señal con ruido 3dB ventaneada")
 plt.subplot(2,2,1)
-plt.title('BLACKMAN (SNR = 3dB)')
+plt.title('BLACKMAN ')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_BM3)**2) * 10)  # Densidad espectral de potencia
-plt.xlim([0, fs/2])
+plt.xlim([-fs/2, fs/2])
 
 plt.subplot(2,2,2)
-plt.title('RECTANGULAR (SNR = 3dB)')
+plt.title('RECTANGULAR')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_R3)**2) * 10)  # Densidad espectral de potencia
-plt.xlim([0, fs/2])
+plt.xlim([-fs/2, fs/2])
 
 plt.subplot(2,2,3)
-plt.title('HAMMING (SNR = 3dB)')
+plt.title('HAMMING')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_H3)**2) * 10)  # Densidad espectral de potencia
 plt.xlim([0, fs/2])
 
 plt.subplot(2,2,4)
-plt.title('FLATOP (SNR = 3dB)')
+plt.title('FLAT-TOP')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_ft3)**2) * 10)  # Densidad espectral de potencia
@@ -210,30 +194,30 @@ X_mat_H10 = (1/N) * fft(x_vent_H10, axis=0)
 
 # Graficos de la transformada de senales ventanadas con ruido
 plt.figure()
-
+plt.title("Señal con ruido 10dB ventaneada")
 plt.subplot(2,2,1)
-plt.title('BLACKMAN (SNR = 10dB)')
+plt.title('BLACKMAN')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_BM10)**2) * 10)  # Densidad espectral de potencia
 plt.xlim([0, fs/2])
 
 plt.subplot(2,2,2)
-plt.title('RECTANGULAR (SNR = 10dB)')
+plt.title('RECTANGULAR')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_R10)**2) * 10)  # Densidad espectral de potencia
 plt.xlim([0, fs/2])
 
 plt.subplot(2,2,3)
-plt.title('HAMMING (SNR = 10dB)')
+plt.title('HAMMING')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_H10)**2) * 10)  # Densidad espectral de potencia
 plt.xlim([0, fs/2])
 
 plt.subplot(2,2,4)
-plt.title('FLATOP (SNR = 10dB)')
+plt.title('FLATOP')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_ft10)**2) * 10)  # Densidad espectral de potencia
@@ -252,38 +236,38 @@ estimador_a_BM_3= 10*np.log10(2*(np.abs(X_mat_BM3[N//4,:])**2))
 estimador_a_R_3= 10*np.log10(2*(np.abs(X_mat_R3[N//4,:])**2))
 estimador_a_H_3= 10*np.log10(2*(np.abs(X_mat_H3[N//4,:])**2))
 
-plt.figure()
-plt.title("Histograma de la estimación de energía (SNR = 3dB)")
-plt.hist(estimador_a_BM_3, label = 'Blackman', alpha = trans, bins = bins)
-plt.hist(estimador_a_R_3,label = 'Rectangular', alpha = trans, bins = bins)
-plt.hist(estimador_a_H_3,label = 'Hamming', alpha = trans, bins = bins)
-plt.hist(estimador_a_FT_3,label = 'Flatop', alpha = trans, bins = bins)
-plt.legend()
-plt.show()
-
-
 # SNR = 10dB
 estimador_a_FT_10= 10*np.log10(2*(np.abs(X_mat_ft10[N//4,:])**2))
 estimador_a_BM_10= 10*np.log10(2*(np.abs(X_mat_BM10[N//4,:])**2))
 estimador_a_R_10= 10*np.log10(2*(np.abs(X_mat_R10[N//4,:])**2))
 estimador_a_H_10= 10*np.log10(2*(np.abs(X_mat_H10[N//4,:])**2))
 
+
 plt.figure()
-plt.title("Histograma de la estimación de energía (SNR = 10dB)")
+plt.title("Histograma de la estimación de energía")
+plt.subplot(1,2,1)
+plt.title("SNR = 3dB")
+plt.hist(estimador_a_BM_3, label = 'Blackman', alpha = trans, bins = bins)
+plt.hist(estimador_a_R_3,label = 'Rectangular', alpha = trans, bins = bins)
+plt.hist(estimador_a_H_3,label = 'Hamming', alpha = trans, bins = bins)
+plt.hist(estimador_a_FT_3,label = 'Flatop', alpha = trans, bins = bins)
+plt.xlabel('Frecuencia [Hz]')
+plt.ylabel('#Cantidad de ocurrencias')
+plt.legend()
+
+plt.subplot(1,2,2)
+plt.title("SNR = 10dB")
 plt.hist(estimador_a_BM_10, label = 'Blackman', alpha = trans, bins = bins)
 plt.hist(estimador_a_R_10,label = 'Rectangular', alpha = trans, bins = bins)
 plt.hist(estimador_a_H_10,label = 'Hamming', alpha = trans, bins = bins)
 plt.hist(estimador_a_FT_10,label = 'Flatop', alpha = trans, bins = bins)
+plt.xlabel('Frecuencia [Hz]')
+plt.ylabel('#Cantidad de ocurrencias')
 plt.legend()
 plt.show()
 
 # %% Estimador de frecuencia               
 
-plt.figure()
-plt.hist(estimador_frec, bins=20, alpha=0.7)
-plt.xlabel("Frecuencia estimada [Hz]")
-plt.ylabel("Cantidad de ocurrencias")
-plt.title("Histograma del estimador de frecuencia")
-plt.show()
+
 
 
