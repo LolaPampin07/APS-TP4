@@ -1,30 +1,27 @@
-# -*- coding: utf-8 -*-
-# %%librerias + variables
+# %% Librerias + variables
 
 
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal
-from numpy.fft import fft, fftshift
+from numpy.fft import fft
 from scipy.signal import windows
 
-# declaracion de varibles
+# Declaracion de varibles
 
-N = 1000 #cantidad de muestras
-fs = N #frecuencia de muestreo
+N = 1000 # Cantidad de muestras
+fs = N # Frecuencia de muestreo
 df = fs/N # Resolucion temporal
-a0 = 2 #amplitud
+a0 = 2 # Amplitud
 realizaciones = 200 # Sirve para parametrizar la cantidad de realizaciones de sampling ->muestras que vamos a tomar de la frecuencia
-omega_0 = np.pi / 2 # fs/4 -> mitad de banda digital
-fr = np.random.uniform(-2,2) #variable aleatoria de distribucion normal para la frecuencia
-omega_1 = omega_0 + fr * 2 * np.pi / N
+omega_0 = fs / 4 # fs/4 -> mitad de banda digital
+fr = np.random.uniform(-2,2) # Variable aleatoria de distribucion normal para la frecuencia
+omega_1 = omega_0 + fr * df
 nn = np.arange(N) # Vector dimensional de muestras
 ff = np.arange(N) # Vector en frecuencia al escalar las muestras por la resolucion espectral
 
-#signal to noise ratio en dB segun pide la consigna
+# Signal to noise ratio en dB segun pide la consigna
 SNR3=3
 SNR10 = 10
-
 
 # %% FUNCION SENOIDAL
 def mi_funcion_sen(frecuencia, nn, amplitud = 1, offset = 0, fase = 0, fs = 2):   
@@ -92,7 +89,11 @@ plt.show()
 # Todo el piso de ruido es tapado por la energia, al ser esta tan tan grande (casi infinitamente mas grande), lo tapa al ruido.
 
 # %% Realizo las 200 realizaciones
+<<<<<<< HEAD
 k0 = omega_1 / 4
+=======
+k0 = omega_1
+>>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 t = np.arange(N).reshape(-1,1) / fs # reshape para que las columnas sean tiempo
 t_mat = np.tile(t, (1, realizaciones)) # (1000, 200)
 
@@ -121,6 +122,7 @@ x_mat10 = s_mat + ruido_mat10
 X_mat3 = (1/N) * fft(x_mat3, axis=0)
 X_mat10 = (1/N) * fft(x_mat10, axis=0)
 
+<<<<<<< HEAD
 # plt.figure()
 # plt.title('FFT señal + ruido')
 # plt.xlabel('Frecuencia (Hz)')
@@ -130,15 +132,25 @@ X_mat10 = (1/N) * fft(x_mat10, axis=0)
 # plt.xlim([0, fs/2])
 # plt.legend()
 # plt.show()
+=======
+plt.figure()
+plt.title('FFT señal + ruido')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('PDS [db]')
+plt.plot(ff, np.log10(2*np.abs(X_mat3)**2) * 10)  # Densidad espectral de potencia
+plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10)
+plt.xlim([0, fs/2])
+plt.show()
+>>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 
 
 # %% Señales ventaneadas
 
 # SNR = 3dB
-x_vent_fla3 = ruido_mat3 * (windows.flattop(N).reshape(-1,1))
-x_vent_BM3 = ruido_mat3 * (windows.blackman(N).reshape(-1,1))
-x_vent_R3 = ruido_mat3 * (windows.boxcar(N).reshape(-1,1))
-x_vent_H3 = ruido_mat3 * (windows.hamming(N).reshape(-1,1))
+x_vent_fla3 = x_mat3 * (windows.flattop(N).reshape(-1,1))
+x_vent_BM3 = x_mat3 * (windows.blackman(N).reshape(-1,1))
+x_vent_R3 = x_mat3 * (windows.boxcar(N).reshape(-1,1))
+x_vent_H3 = x_mat3 * (windows.hamming(N).reshape(-1,1))
 
 # Calculo la FFT normalizada a lo largo del eje del tiempo (filas)
 X_mat_ft3 = (1/N) * fft(x_vent_fla3, axis=0)
@@ -148,9 +160,16 @@ X_mat_H3 = (1/N) * fft(x_vent_H3, axis=0)
 
 # Graficos de la transformada de senales ventanadas con ruido
 plt.figure()
+<<<<<<< HEAD
 plt.title("Señal con ruido 3dB ventaneada")
 plt.subplot(2,2,1)
 plt.title('BLACKMAN ')
+=======
+plt.suptitle("Señal con ruido 3dB ventaneada")
+
+plt.subplot(2,2,1)
+plt.title('BLACKMAN')
+>>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_BM3)**2) * 10)  # Densidad espectral de potencia
@@ -181,10 +200,10 @@ plt.tight_layout()
 plt.show()
 
 # SNR = 10dB
-x_vent_fla10 = ruido_mat10 * (windows.flattop(N).reshape(-1,1))
-x_vent_BM10 = ruido_mat10 * (windows.blackman(N).reshape(-1,1))
-x_vent_R10 = ruido_mat10 * (windows.boxcar(N).reshape(-1,1))
-x_vent_H10 = ruido_mat10 * (windows.hamming(N).reshape(-1,1))
+x_vent_fla10 = x_mat10 * (windows.flattop(N).reshape(-1,1))
+x_vent_BM10 = x_mat10 * (windows.blackman(N).reshape(-1,1))
+x_vent_R10 = x_mat10 * (windows.boxcar(N).reshape(-1,1))
+x_vent_H10 = x_mat10 * (windows.hamming(N).reshape(-1,1))
 
 # Calculo la FFT normalizada a lo largo del eje del tiempo (filas)
 X_mat_ft10 = (1/N) * fft(x_vent_fla10, axis=0)
@@ -194,7 +213,12 @@ X_mat_H10 = (1/N) * fft(x_vent_H10, axis=0)
 
 # Graficos de la transformada de senales ventanadas con ruido
 plt.figure()
+<<<<<<< HEAD
 plt.title("Señal con ruido 10dB ventaneada")
+=======
+plt.suptitle("Señal con ruido 10dB ventaneada")
+
+>>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 plt.subplot(2,2,1)
 plt.title('BLACKMAN')
 plt.xlabel('Frecuencia (Hz)')
@@ -244,7 +268,12 @@ estimador_a_H_10= 10*np.log10(2*(np.abs(X_mat_H10[N//4,:])**2))
 
 
 plt.figure()
+<<<<<<< HEAD
 plt.title("Histograma de la estimación de energía")
+=======
+plt.suptitle("Histograma de la estimación de energía")
+
+>>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 plt.subplot(1,2,1)
 plt.title("SNR = 3dB")
 plt.hist(estimador_a_BM_3, label = 'Blackman', alpha = trans, bins = bins)
@@ -264,9 +293,80 @@ plt.hist(estimador_a_FT_10,label = 'Flatop', alpha = trans, bins = bins)
 plt.xlabel('Frecuencia [Hz]')
 plt.ylabel('#Cantidad de ocurrencias')
 plt.legend()
+
 plt.show()
 
-# %% Estimador de frecuencia               
+# %% Estimador de frecuencia
+
+<<<<<<< HEAD
+
+=======
+# Defino rango de frecuencias (en Hz)
+freqs = np.fft.fftfreq(N, 1/fs)  # Eje de frecuencias
+freqs = freqs[:N//2] 
+
+# SNR = 3 dB
+mag_FT3 = np.abs(X_mat_ft3[:N//2, :])
+idx_FT3 = np.argmax(mag_FT3, axis=0)
+est_frec_FT_3 = idx_FT3 * df
+
+mag_BM3 = np.abs(X_mat_BM3[:N//2, :])
+idx_BM3 = np.argmax(mag_BM3, axis=0)
+est_frec_BM_3 = idx_BM3 * df
+
+mag_R3 = np.abs(X_mat_R3[:N//2, :])
+idx_R3 = np.argmax(mag_R3, axis=0)
+est_frec_R_3 = idx_R3 * df
+
+mag_H3 = np.abs(X_mat_H3[:N//2, :])
+idx_H3 = np.argmax(mag_H3, axis=0)
+est_frec_H_3 = idx_H3 * df
+
+
+# SNR = 10 dB 
+mag_FT10 = np.abs(X_mat_ft10[:N//2, :])
+idx_FT10 = np.argmax(mag_FT10, axis=0)
+est_frec_FT_10 = idx_FT10 * df
+
+mag_BM10 = np.abs(X_mat_BM10[:N//2, :])
+idx_BM10 = np.argmax(mag_BM10, axis=0)
+est_frec_BM_10 = idx_BM10 * df
+
+mag_R10 = np.abs(X_mat_R10[:N//2, :])
+idx_R10 = np.argmax(mag_R10, axis=0)
+est_frec_R_10 = idx_R10 * df
+
+mag_H10 = np.abs(X_mat_H10[:N//2, :])
+idx_H10 = np.argmax(mag_H10, axis=0)
+est_frec_H_10 = idx_H10 * df
+
+# Grafico los histogramas
+plt.figure()
+plt.suptitle("Histograma del estimador de frecuencia")
+
+plt.subplot(1,2,1)
+plt.title("SNR = 3 dB")
+plt.hist(est_frec_BM_3, label = 'Blackman', alpha = trans, bins = 30)
+plt.hist(est_frec_R_3, label = 'Rectangular', alpha = trans, bins = 30)
+plt.hist(est_frec_FT_3, label = 'Flattop', alpha = trans, bins = 30)
+plt.hist(est_frec_H_3, label = 'Hamming', alpha = trans, bins = 30)
+plt.xlabel("Frecuencia [Hz]")
+plt.ylabel("#Cantidad de ocurrencias")
+plt.legend()
+
+plt.subplot(1,2,2)
+plt.title("SNR = 10 dB")
+plt.hist(est_frec_BM_10, label = 'Blackman', alpha = trans, bins = 30)
+plt.hist(est_frec_R_10, label = 'Rectangular', alpha = trans, bins = 30)
+plt.hist(est_frec_FT_10, label = 'Flattop', alpha = trans, bins = 30)
+plt.hist(est_frec_H_10, label = 'Hamming', alpha = trans, bins = 30)
+plt.xlabel("Frecuencia [Hz]")
+plt.ylabel("#Cantidad de ocurrencias")
+plt.legend()
+
+plt.tight_layout()
+plt.show()
+>>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 
 
 
