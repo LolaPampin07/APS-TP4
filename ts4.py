@@ -1,6 +1,4 @@
 # %% Librerias + variables
-
-
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy.fft import fft
@@ -89,11 +87,7 @@ plt.show()
 # Todo el piso de ruido es tapado por la energia, al ser esta tan tan grande (casi infinitamente mas grande), lo tapa al ruido.
 
 # %% Realizo las 200 realizaciones
-<<<<<<< HEAD
-k0 = omega_1 / 4
-=======
 k0 = omega_1
->>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 t = np.arange(N).reshape(-1,1) / fs # reshape para que las columnas sean tiempo
 t_mat = np.tile(t, (1, realizaciones)) # (1000, 200)
 
@@ -122,17 +116,7 @@ x_mat10 = s_mat + ruido_mat10
 X_mat3 = (1/N) * fft(x_mat3, axis=0)
 X_mat10 = (1/N) * fft(x_mat10, axis=0)
 
-<<<<<<< HEAD
-# plt.figure()
-# plt.title('FFT señal + ruido')
-# plt.xlabel('Frecuencia (Hz)')
-# plt.ylabel('PDS [db]')
-# plt.plot(ff, np.log10(2*np.abs(X_mat3)**2) * 10, label = 'SNR = 3dB')  # Densidad espectral de potencia
-# plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10, label = 'SNR = 10dB')
-# plt.xlim([0, fs/2])
-# plt.legend()
-# plt.show()
-=======
+# Grafico señal + ruido
 plt.figure()
 plt.title('FFT señal + ruido')
 plt.xlabel('Frecuencia (Hz)')
@@ -141,8 +125,6 @@ plt.plot(ff, np.log10(2*np.abs(X_mat3)**2) * 10)  # Densidad espectral de potenc
 plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10)
 plt.xlim([0, fs/2])
 plt.show()
->>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
-
 
 # %% Señales ventaneadas
 
@@ -160,27 +142,21 @@ X_mat_H3 = (1/N) * fft(x_vent_H3, axis=0)
 
 # Graficos de la transformada de senales ventanadas con ruido
 plt.figure()
-<<<<<<< HEAD
-plt.title("Señal con ruido 3dB ventaneada")
-plt.subplot(2,2,1)
-plt.title('BLACKMAN ')
-=======
 plt.suptitle("Señal con ruido 3dB ventaneada")
 
 plt.subplot(2,2,1)
 plt.title('BLACKMAN')
->>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_BM3)**2) * 10)  # Densidad espectral de potencia
-plt.xlim([-fs/2, fs/2])
+plt.xlim([0, fs/2])
 
 plt.subplot(2,2,2)
 plt.title('RECTANGULAR')
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat_R3)**2) * 10)  # Densidad espectral de potencia
-plt.xlim([-fs/2, fs/2])
+plt.xlim([0, fs/2])
 
 plt.subplot(2,2,3)
 plt.title('HAMMING')
@@ -213,12 +189,8 @@ X_mat_H10 = (1/N) * fft(x_vent_H10, axis=0)
 
 # Graficos de la transformada de senales ventanadas con ruido
 plt.figure()
-<<<<<<< HEAD
-plt.title("Señal con ruido 10dB ventaneada")
-=======
 plt.suptitle("Señal con ruido 10dB ventaneada")
 
->>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 plt.subplot(2,2,1)
 plt.title('BLACKMAN')
 plt.xlabel('Frecuencia (Hz)')
@@ -268,12 +240,8 @@ estimador_a_H_10= 10*np.log10(2*(np.abs(X_mat_H10[N//4,:])**2))
 
 
 plt.figure()
-<<<<<<< HEAD
-plt.title("Histograma de la estimación de energía")
-=======
 plt.suptitle("Histograma de la estimación de energía")
 
->>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 plt.subplot(1,2,1)
 plt.title("SNR = 3dB")
 plt.hist(estimador_a_BM_3, label = 'Blackman', alpha = trans, bins = bins)
@@ -298,9 +266,6 @@ plt.show()
 
 # %% Estimador de frecuencia
 
-<<<<<<< HEAD
-
-=======
 # Defino rango de frecuencias (en Hz)
 freqs = np.fft.fftfreq(N, 1/fs)  # Eje de frecuencias
 freqs = freqs[:N//2] 
@@ -366,7 +331,6 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
->>>>>>> ef02d17 (Correccion unidades + graficos prolijos + estimador de frecuencias)
 
 
 
