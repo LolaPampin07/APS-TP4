@@ -126,7 +126,7 @@ plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10)
 plt.xlim([0, fs/2])
 plt.show()
 
-# %% Señales ventaneadas
+# %%#Ventaneo y graficos de la senales con ruido
 
 # SNR = 3dB
 x_vent_fla3 = x_mat3 * (windows.flattop(N).reshape(-1,1))
@@ -248,7 +248,7 @@ plt.hist(estimador_a_BM_3, label = 'Blackman', alpha = trans, bins = bins)
 plt.hist(estimador_a_R_3,label = 'Rectangular', alpha = trans, bins = bins)
 plt.hist(estimador_a_H_3,label = 'Hamming', alpha = trans, bins = bins)
 plt.hist(estimador_a_FT_3,label = 'Flatop', alpha = trans, bins = bins)
-plt.xlabel('Frecuencia [Hz]')
+plt.xlabel('PDS [db]')
 plt.ylabel('#Cantidad de ocurrencias')
 plt.legend()
 
@@ -258,7 +258,7 @@ plt.hist(estimador_a_BM_10, label = 'Blackman', alpha = trans, bins = bins)
 plt.hist(estimador_a_R_10,label = 'Rectangular', alpha = trans, bins = bins)
 plt.hist(estimador_a_H_10,label = 'Hamming', alpha = trans, bins = bins)
 plt.hist(estimador_a_FT_10,label = 'Flatop', alpha = trans, bins = bins)
-plt.xlabel('Frecuencia [Hz]')
+plt.xlabel('PDS [db]')
 plt.ylabel('#Cantidad de ocurrencias')
 plt.legend()
 
