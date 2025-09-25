@@ -336,7 +336,7 @@ plt.show()
 # %% SESGO Y VARIANZA
 
 # Valor real de referencia en dB para amplitud
-amplitud_referencia_dB = 20 * np.log10(a0 / np.sqrt(2)) # Valor RMS pasando a dB
+amplitud_referencia_dB = 10*np.log10(a0) # Valor RMS pasando a dB
 
 # Sesgo de los estimadores de amplitud (SNR = 3dB), valor medio calculado a traves de la mediana
 sesgo_amp_rectangular3 = np.median(estimador_a_R_3) - amplitud_referencia_dB
