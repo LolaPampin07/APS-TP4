@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from numpy.fft import fft
 from scipy.signal import windows
+from scipy import stats
 
 # Declaracion de varibles
 
@@ -337,17 +338,23 @@ plt.show()
 # Valor real de referencia en dB para amplitud
 amplitud_referencia_dB = 20 * np.log10(a0 / np.sqrt(2)) # Valor RMS pasando a dB
 
-# Sesgo de los estimadores de amplitud (SNR = 3dB)
+# Sesgo de los estimadores de amplitud (SNR = 3dB), valor medio calculado a traves de la mediana
 sesgo_amp_rectangular3 = np.median(estimador_a_R_3) - amplitud_referencia_dB
 sesgo_amp_blackman3 = np.median(estimador_a_BM_3) - amplitud_referencia_dB
 sesgo_amp_flattop3 = np.median(estimador_a_FT_3) - amplitud_referencia_dB
 sesgo_amp_hamming3 = np.median(estimador_a_H_3) - amplitud_referencia_dB
 
-# Varianza de los estimadores de amplitus (SNR = 3dB)
-var_amp_rectangular3 = np.var(estimador_a_R_3, ddof = 1)
-var_amp_blackman3 = np.var(estimador_a_BM_3, ddof = 1)
-var_amp_flattop3 = np.var(estimador_a_FT_3, ddof = 1)
-var_amp_hamming3 = np.var(estimador_a_H_3, ddof = 1)
+# Varianza de los estimadores de amplitud (SNR = 3dB)
+# var_amp_rectangular3 = np.var(estimador_a_R_3, ddof = 1)
+# var_amp_blackman3 = np.var(estimador_a_BM_3, ddof = 1)
+# var_amp_flattop3 = np.var(estimador_a_FT_3, ddof = 1)
+# var_amp_hamming3 = np.var(estimador_a_H_3, ddof = 1)
+
+
+var_amp_rectangular3 = stats.median_abs_deviation(estimador_a_R_3, center = np.median)
+var_amp_blackman3 = stats.median_abs_deviation(estimador_a_BM_3, center = np.median)
+var_amp_flattop3 = stats.median_abs_deviation(estimador_a_FT_3, center = np.median)
+var_amp_hamming3 = stats.median_abs_deviation(estimador_a_H_3, center = np.median)
 
 print("\n===== Amplitud (dB) =====")
 print("SNR = 3dB")
@@ -363,10 +370,16 @@ sesgo_amp_flattop10 = np.median(estimador_a_FT_10) - amplitud_referencia_dB
 sesgo_amp_hamming10 = np.median(estimador_a_H_10) - amplitud_referencia_dB
 
 ## Varianza de los estimadores de amplitud (SNR = 10 dB)
-var_amp_rectangular10 = np.var(estimador_a_R_10, ddof=1)
-var_amp_blackman10 = np.var(estimador_a_BM_10, ddof=1)
-var_amp_flattop10 = np.var(estimador_a_FT_10, ddof=1)
-var_amp_hamming10 = np.var(estimador_a_H_10, ddof=1)
+# var_amp_rectangular10 = np.var(estimador_a_R_10, ddof=1)
+# var_amp_blackman10 = np.var(estimador_a_BM_10, ddof=1)
+# var_amp_flattop10 = np.var(estimador_a_FT_10, ddof=1)
+# var_amp_hamming10 = np.var(estimador_a_H_10, ddof=1)
+ 
+var_amp_rectangular10 = stats.median_abs_deviation(estimador_a_R_10, center = np.median)
+var_amp_blackman10 = stats.median_abs_deviation(estimador_a_BM_10, center = np.median)
+var_amp_flattop10 = stats.median_abs_deviation(estimador_a_FT_10, center = np.median)
+var_amp_hamming10 = stats.median_abs_deviation(estimador_a_H_10, center = np.median)
+
 
 print("\nSNR = 10dB")
 print(f"Rectangular: sesgo = {sesgo_amp_rectangular10:.4f}, varianza = {var_amp_rectangular10:.4f}")
@@ -375,7 +388,7 @@ print(f"Flat-top: sesgo = {sesgo_amp_flattop10:.4f}, varianza = {var_amp_flattop
 print(f"Hamming: sesgo = {sesgo_amp_hamming10:.4f}, varianza = {var_amp_hamming10:.4f}")
 
 # Valor real de la frecuencia en Hz
-f_referencia = omega_1 * df
+f_referencia = omega_0 * df
 
 # Sesgo de los estimadores de frecuencia (SNR = 3 dB)
 sesgo_frec_rectangular3 = np.median(est_frec_R_3) - f_referencia
@@ -384,10 +397,10 @@ sesgo_frec_flattop3 = np.median(est_frec_FT_3) - f_referencia
 sesgo_frec_hamming3 = np.median(est_frec_H_3) - f_referencia
 
 # Varianza de los estimadores de frecuencia (SNR = 3 dB)
-var_frec_rectangular3 = np.var(est_frec_R_3, ddof=1)
-var_frec_blackman3 = np.var(est_frec_BM_3, ddof=1)
-var_frec_flattop3 = np.var(est_frec_FT_3, ddof=1)
-var_frec_hamming3 = np.var(est_frec_H_3, ddof=1)
+var_frec_rectangular3 = stats.median_abs_deviation(est_frec_R_3, center = np.median) 
+var_frec_blackman3 = stats.median_abs_deviation(est_frec_BM_3, center = np.median) 
+var_frec_flattop3 = stats.median_abs_deviation(est_frec_FT_3, center = np.median) 
+var_frec_hamming3 = stats.median_abs_deviation(est_frec_H_3, center = np.median) 
 
 print("\n===== Frecuencia (Hz) =====")
 print("\nSNR = 3dB")
@@ -404,10 +417,15 @@ sesgo_frec_flattop10 = np.median(est_frec_FT_10) - f_referencia
 sesgo_frec_hamming10 = np.median(est_frec_H_10) - f_referencia
 
 # Varianza de los estimadores de frecuencia (SNR = 10 dB)
-var_frec_rectangular10 = np.var(est_frec_R_10, ddof=1)
-var_frec_blackman10 = np.var(est_frec_BM_10, ddof=1)
-var_frec_flattop10 = np.var(est_frec_FT_10, ddof=1)
-var_frec_hamming10 = np.var(est_frec_H_10, ddof=1)
+# var_frec_rectangular10 = np.var(est_frec_R_10, ddof=1)
+# var_frec_blackman10 = np.var(est_frec_BM_10, ddof=1)
+# var_frec_flattop10 = np.var(est_frec_FT_10, ddof=1)
+# var_frec_hamming10 = np.var(est_frec_H_10, ddof=1)
+
+var_frec_rectangular10 = stats.median_abs_deviation(est_frec_R_10, center = np.median) 
+var_frec_blackman10 = stats.median_abs_deviation(est_frec_R_10, center = np.median) 
+var_frec_flattop10 = stats.median_abs_deviation(est_frec_FT_10, center = np.median) 
+var_frec_hamming10 = stats.median_abs_deviation(est_frec_H_10, center = np.median) 
 
 print("\nSNR = 10dB")
 print(f"Rectangular: sesgo = {sesgo_frec_rectangular10:.4f}, varianza = {var_frec_rectangular10:.4f}")
