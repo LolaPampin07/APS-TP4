@@ -332,6 +332,94 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
+# %% SESGO Y VARIANZA
+
+# Valor real de referencia en dB para amplitud
+amplitud_referencia_dB = 20 * np.log10(a0 / np.sqrt(2)) # Valor RMS pasando a dB
+
+# Sesgo de los estimadores de amplitud (SNR = 3dB)
+sesgo_amp_rectangular3 = np.median(estimador_a_R_3) - amplitud_referencia_dB
+sesgo_amp_blackman3 = np.median(estimador_a_BM_3) - amplitud_referencia_dB
+sesgo_amp_flattop3 = np.median(estimador_a_FT_3) - amplitud_referencia_dB
+sesgo_amp_hamming3 = np.median(estimador_a_H_3) - amplitud_referencia_dB
+
+# Varianza de los estimadores de amplitus (SNR = 3dB)
+var_amp_rectangular3 = np.var(estimador_a_R_3, ddof = 1)
+var_amp_blackman3 = np.var(estimador_a_BM_3, ddof = 1)
+var_amp_flattop3 = np.var(estimador_a_FT_3, ddof = 1)
+var_amp_hamming3 = np.var(estimador_a_H_3, ddof = 1)
+
+print("\n===== Amplitud (dB) =====")
+print("SNR = 3dB")
+print(f"Rectangular: sesgo = {sesgo_amp_rectangular3:.4f}, varianza = {var_amp_rectangular3:.4f}")
+print(f"Blackman: sesgo = {sesgo_amp_blackman3:.4f}, varianza = {var_amp_blackman3:.4f}")
+print(f"Flat-top: sesgo = {sesgo_amp_flattop3:.4f}, varianza = {var_amp_flattop3:.4f}")
+print(f"Hamming: sesgo = {sesgo_amp_hamming3:.4f}, varianza = {var_amp_hamming3:.4f}")
+
+# Sesgo de los estimadores de amplitud (SNR = 10 dB)
+sesgo_amp_rectangular10 = np.median(estimador_a_R_10) - amplitud_referencia_dB
+sesgo_amp_blackman10 = np.median(estimador_a_BM_10) - amplitud_referencia_dB
+sesgo_amp_flattop10 = np.median(estimador_a_FT_10) - amplitud_referencia_dB
+sesgo_amp_hamming10 = np.median(estimador_a_H_10) - amplitud_referencia_dB
+
+## Varianza de los estimadores de amplitud (SNR = 10 dB)
+var_amp_rectangular10 = np.var(estimador_a_R_10, ddof=1)
+var_amp_blackman10 = np.var(estimador_a_BM_10, ddof=1)
+var_amp_flattop10 = np.var(estimador_a_FT_10, ddof=1)
+var_amp_hamming10 = np.var(estimador_a_H_10, ddof=1)
+
+print("\nSNR = 10dB")
+print(f"Rectangular: sesgo = {sesgo_amp_rectangular10:.4f}, varianza = {var_amp_rectangular10:.4f}")
+print(f"Blackman: sesgo = {sesgo_amp_blackman10:.4f}, varianza = {var_amp_blackman10:.4f}")
+print(f"Flat-top: sesgo = {sesgo_amp_flattop10:.4f}, varianza = {var_amp_flattop10:.4f}")
+print(f"Hamming: sesgo = {sesgo_amp_hamming10:.4f}, varianza = {var_amp_hamming10:.4f}")
+
+# Valor real de la frecuencia en Hz
+f_referencia = omega_1 * df
+
+# Sesgo de los estimadores de frecuencia (SNR = 3 dB)
+sesgo_frec_rectangular3 = np.median(est_frec_R_3) - f_referencia
+sesgo_frec_blackman3 = np.median(est_frec_BM_3) - f_referencia
+sesgo_frec_flattop3 = np.median(est_frec_FT_3) - f_referencia
+sesgo_frec_hamming3 = np.median(est_frec_H_3) - f_referencia
+
+# Varianza de los estimadores de frecuencia (SNR = 3 dB)
+var_frec_rectangular3 = np.var(est_frec_R_3, ddof=1)
+var_frec_blackman3 = np.var(est_frec_BM_3, ddof=1)
+var_frec_flattop3 = np.var(est_frec_FT_3, ddof=1)
+var_frec_hamming3 = np.var(est_frec_H_3, ddof=1)
+
+print("\n===== Frecuencia (Hz) =====")
+print("\nSNR = 3dB")
+print(f"Rectangular: sesgo = {sesgo_frec_rectangular3:.4f}, varianza = {var_frec_rectangular3:.4f}")
+print(f"Blackman: sesgo = {sesgo_frec_blackman3:.4f}, varianza = {var_frec_blackman3:.4f}")
+print(f"Flat-top: sesgo = {sesgo_frec_flattop3:.4f}, varianza = {var_frec_flattop3:.4f}")
+print(f"Hamming: sesgo = {sesgo_frec_hamming3:.4f}, varianza = {var_frec_hamming3:.4f}")
+
+
+# Sesgo de los estimadores de frecuencia (SNR = 10 dB)
+sesgo_frec_rectangular10 = np.median(est_frec_R_10) - f_referencia
+sesgo_frec_blackman10 = np.median(est_frec_BM_10) - f_referencia
+sesgo_frec_flattop10 = np.median(est_frec_FT_10) - f_referencia
+sesgo_frec_hamming10 = np.median(est_frec_H_10) - f_referencia
+
+# Varianza de los estimadores de frecuencia (SNR = 10 dB)
+var_frec_rectangular10 = np.var(est_frec_R_10, ddof=1)
+var_frec_blackman10 = np.var(est_frec_BM_10, ddof=1)
+var_frec_flattop10 = np.var(est_frec_FT_10, ddof=1)
+var_frec_hamming10 = np.var(est_frec_H_10, ddof=1)
+
+print("\nSNR = 10dB")
+print(f"Rectangular: sesgo = {sesgo_frec_rectangular10:.4f}, varianza = {var_frec_rectangular10:.4f}")
+print(f"Blackman: sesgo = {sesgo_frec_blackman10:.4f}, varianza = {var_frec_blackman10:.4f}")
+print(f"Flat-top: sesgo = {sesgo_frec_flattop10:.4f}, varianza = {var_frec_flattop10:.4f}")
+print(f"Hamming: sesgo = {sesgo_frec_hamming10:.4f}, varianza = {var_frec_hamming10:.4f}")
+
+
+
+
+
+
 
 
 
