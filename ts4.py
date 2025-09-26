@@ -118,13 +118,24 @@ X_mat3 = (1/N) * fft(x_mat3, axis=0)
 X_mat10 = (1/N) * fft(x_mat10, axis=0)
 
 # Grafico señal + ruido
-plt.figure()
-plt.title('FFT señal + ruido')
+plt.figure(figsize=(20,20))
+plt.suptitle('FFT Señal + ruido')
+plt.subplot(1,2,1)
+plt.title('SNR 3dB')
+
 plt.xlabel('Frecuencia (Hz)')
 plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat3)**2) * 10)  # Densidad espectral de potencia
+plt.xlim([0, fs/2])
+
+
+plt.subplot(1,2,2)
+plt.title('SNR 10dB')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('PDS [db]')
 plt.plot(ff, np.log10(2*np.abs(X_mat10)**2) * 10)
 plt.xlim([0, fs/2])
+
 plt.show()
 
 # %%#Ventaneo y graficos de la senales con ruido
