@@ -415,11 +415,10 @@ sesgo_frec_flattop3 = np.mean(est_frec_FT_3) - omega_0
 sesgo_frec_hamming3 = np.mean(est_frec_H_3) - omega_0
 
 # Varianza de los estimadores de frecuencia (SNR = 3 dB)
-var_frec_rectangular3 = stats.median_abs_deviation(est_frec_R_3, center = np.median) 
-var_frec_blackman3 = stats.median_abs_deviation(est_frec_BM_3, center = np.median) 
-var_frec_flattop3 = stats.median_abs_deviation(est_frec_FT_3, center = np.median) 
-var_frec_hamming3 = stats.median_abs_deviation(est_frec_H_3, center = np.median) 
-
+var_frec_rectangular3=np.var(est_frec_R_3)
+var_frec_blackman3 = np.var(est_frec_R_3) 
+var_frec_flattop3 = np.var(est_frec_FT_3) 
+var_frec_hamming3 = np.var(est_frec_H_3) 
 print("\n===== Frecuencia (Hz) =====")
 print("\nSNR = 3dB")
 print(f"Rectangular: sesgo = {sesgo_frec_rectangular3:.4f}, varianza = {var_frec_rectangular3:.4f}")
