@@ -19,6 +19,11 @@ omega_1 = omega_0 + fr * df
 nn = np.arange(N) # Vector dimensional de muestras
 ff = np.arange(N) # Vector en frecuencia al escalar las muestras por la resolucion espectral
 
+#definicion de mi matriz de realizaciones
+rows=N
+cols=200
+
+
 # Signal to noise ratio en dB segun pide la consigna
 SNR3=3
 SNR10 = 10
@@ -95,8 +100,13 @@ t_mat = np.tile(t, (1, realizaciones)) # (1000, 200)
 
 
 # Repetir fr en filas (mismo valor de frecuencias por columna)
-frecuencias = (k0 + fr) * df # en Hz
-f_mat = np.tile(frecuencias, (N, 1))  # (1000, 200)
+#f_fila = np.tile((k0 + np.random.uniform(-2,2)) * df, (N, 1))  # (1000, 1)
+
+f_mat = np.zeros((rows, cols))
+for i in range(cols):
+    f_col = (k0 + np.random.uniform(-2, 2)) * df
+    f_mat[:, i] = np.tile(f_col, rows)
+
 
 
 # Matriz de senoidales
@@ -399,10 +409,10 @@ print(f"Hamming: sesgo = {sesgo_amp_hamming10:.4f}, varianza = {var_amp_hamming1
 f_referencia = omega_0 
 
 # Sesgo de los estimadores de frecuencia (SNR = 3 dB)
-sesgo_frec_rectangular3 = np.median(est_frec_R_3) - omega_0
-sesgo_frec_blackman3 = np.median(est_frec_BM_3) - omega_0
-sesgo_frec_flattop3 = np.median(est_frec_FT_3) - omega_0
-sesgo_frec_hamming3 = np.median(est_frec_H_3) - omega_0
+sesgo_frec_rectangular3 = np.mean(est_frec_R_3) - omega_0
+sesgo_frec_blackman3 = np.mean(est_frec_BM_3) - omega_0
+sesgo_frec_flattop3 = np.mean(est_frec_FT_3) - omega_0
+sesgo_frec_hamming3 = np.mean(est_frec_H_3) - omega_0
 
 # Varianza de los estimadores de frecuencia (SNR = 3 dB)
 var_frec_rectangular3 = stats.median_abs_deviation(est_frec_R_3, center = np.median) 
@@ -420,9 +430,9 @@ print(f"Hamming: sesgo = {sesgo_frec_hamming3:.4f}, varianza = {var_frec_hamming
 
 # Sesgo de los estimadores de frecuencia (SNR = 10 dB)
 sesgo_frec_rectangular10 = np.mean(est_frec_R_10) - omega_0
-sesgo_frec_blackman10 = np.median(est_frec_BM_10) - omega_0
+sesgo_frec_blackman10 = np.mean(est_frec_BM_10) - omega_0
 sesgo_frec_flattop10 = np.mean(est_frec_FT_10) - omega_0
-sesgo_frec_hamming10 = np.median(est_frec_H_10) - omega_0
+sesgo_frec_hamming10 = np.mean(est_frec_H_10) - omega_0
 
 # Varianza de los estimadores de frecuencia (SNR = 10 dB)
 # var_frec_rectangular10 = np.var(est_frec_R_10, ddof=1)
@@ -432,12 +442,12 @@ sesgo_frec_hamming10 = np.median(est_frec_H_10) - omega_0
 
 #var_frec_rectangular10 = stats.median_abs_deviation(est_frec_R_10, center = np.median)
 var_frec_rectangular10=np.var(est_frec_R_10)
-var_frec_blackman10 = stats.median_abs_deviation(est_frec_R_10, center = np.median) 
-var_frec_flattop10 = stats.median_abs_deviation(est_frec_FT_10, center = np.median) 
-var_frec_hamming10 = stats.median_abs_deviation(est_frec_H_10, center = np.median) 
+var_frec_blackman10 = np.var(est_frec_R_10) 
+var_frec_flattop10 = np.var(est_frec_FT_10) 
+var_frec_hamming10 = np.var(est_frec_H_10) 
 
 print("\nSNR = 10dB")
-print(f"Rectangular:sesgo_frec_rectangular10, varianza = {var_frec_rectangular10:.4f}")
+print(f"Rectangular:{sesgo_frec_rectangular10:.4f}, varianza = {var_frec_rectangular10:.4f}")
 print(f"Blackman: sesgo = {sesgo_frec_blackman10:.4f}, varianza = {var_frec_blackman10:.4f}")
 print(f"Flat-top: sesgo = {sesgo_frec_flattop10:.4f}, varianza = {var_frec_flattop10:.4f}")
 print(f"Hamming: sesgo = {sesgo_frec_hamming10:.4f}, varianza = {var_frec_hamming10:.4f}")
